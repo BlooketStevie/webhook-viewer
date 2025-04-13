@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Webhook Viewer</title>
+  <style>
+    body {
+      font-family: sans-serif;
+      padding: 20px;
+      background: #111;
+      color: #0f0;
+    }
+    #log {
+      white-space: pre-wrap;
+      background: #222;
+      border: 1px solid #333;
+      padding: 10px;
+      max-height: 80vh;
+      overflow-y: auto;
+    }
+  </style>
+</head>
+<body>
+  <h1>📡 Incoming Webhook Data</h1>
+  <div id="log">Waiting for events...</div>
+
+  <script>
+    const log = document.getElementById('log');
+    const eventSource = new EventSource('http://localhost:3000/events');
+
+    eventSource.onmessage = (event) => {
+      const data = JSON.parse(event.data);
+      const line = `[${new Date().toLocaleTimeString()}] ${JSON.stringify(data, null, 2)}\n\n`;
+      log.textContent = line + log.textContent;
+    };
+  </script>
+</body>
+</html>
